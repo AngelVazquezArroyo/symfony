@@ -1,0 +1,36 @@
+version: "2"
+
+services:
+  nginx-cra:
+    build: "./.docker/nginx-ubuntu/"
+    container_name: "nginx-cra"
+    links:
+      - "php-cra:php-cra"
+    volumes_from:
+      - php-cra
+    ports:
+        - "80:80"
+        - "443:443"
+
+  mysql-symfony:
+    image: mysql
+    container_name: "mysql-symfony"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "symfony_db"
+      MYSQL_USER: "symfony_db_user"
+      MYSQL_PASSWORD: "symfony_db_pass"
+    expose:
+      - 3306
+
+  php-cra:
+    build: "./.docker/php-ubuntu/"
+    container_name: "php-cra"
+    volumes:
+      - php-cra-sync:/var/www/html:nocopy
+    expose:
+      - 9000
+
+volumes:
+  php-cra-sync:
+    external: true

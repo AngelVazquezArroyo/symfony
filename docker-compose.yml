@@ -1,0 +1,36 @@
+version: "2"
+
+services:
+  nginx-symfony:
+    build: "./.docker/nginx-ubuntu/"
+    container_name: "nginx-symfony"
+    volumes_from:
+      - php-symfony
+    ports:
+        - "80:80"
+        - "443:443"
+    networks:
+      - symfony-network
+
+  mysql-symfony:
+    image: mysql:5.6
+    container_name: "mysql-symfony"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "symfony_db"
+      MYSQL_USER: "symfony_db_user"
+      MYSQL_PASSWORD: "symfony_db_pass"
+    expose:
+      - 3306
+
+  php-symfony:
+    build: "./.docker/php-ubuntu/"
+    container_name: "php-symfony"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - symfony-network
+
+networks:
+  symfony-network:
+    driver: bridge
