@@ -1,0 +1,12 @@
+version: "2"
+
+options:
+  verbose: false
+  compose-file-path: 'docker-compose.mac.yml'
+
+syncs:
+  php-cra-sync:
+    notify_terminal: true
+    src: '.'
+    sync_excludes: ['.git', 'node_modules', 'bower_components']
+    watch_in_container: true
